@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Award, Users, Target, Zap } from "lucide-react";
+import { useParallax } from "@/hooks/useParallax";
 
 const reasons = [
   {
@@ -25,12 +26,21 @@ const reasons = [
 ];
 
 const WhyChooseUs = () => {
+  const scrollY = useParallax();
+  const parallaxOffset = (scrollY - 1600) * 0.12;
+
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-background relative overflow-hidden">
       <div className="container px-4 mx-auto">
-        <div className="text-center space-y-4 mb-16 animate-fade-in">
+        <div 
+          className="text-center space-y-4 mb-16 animate-fade-in"
+          style={{
+            transform: `translateY(${Math.max(0, parallaxOffset)}px)`,
+            transition: 'transform 0.1s ease-out',
+          }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">
-            Why Choose Eunoa?
+            Why Choose Eunoia?
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             We're not just another coding class - we're building the next generation of tech leaders
@@ -40,11 +50,17 @@ const WhyChooseUs = () => {
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {reasons.map((reason, index) => {
             const Icon = reason.icon;
+            const cardParallax = (scrollY - 1700) * (0.08 - index * 0.015);
+            
             return (
               <Card 
                 key={index}
                 className="p-8 hover:shadow-custom-xl transition-all duration-300 bg-gradient-card border-border animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.15}s` }}
+                style={{ 
+                  animationDelay: `${index * 0.15}s`,
+                  transform: `translateY(${Math.max(0, cardParallax)}px)`,
+                  transition: 'transform 0.15s ease-out, box-shadow 0.3s ease',
+                }}
               >
                 <div className="flex gap-6">
                   <div className="flex-shrink-0">

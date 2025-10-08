@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Linkedin, Github, Mail } from "lucide-react";
+import { useParallax } from "@/hooks/useParallax";
 
 const founders = [
   {
@@ -21,10 +22,19 @@ const founders = [
 ];
 
 const Founders = () => {
+  const scrollY = useParallax();
+  const parallaxOffset = (scrollY - 2400) * 0.1;
+
   return (
-    <section className="py-20 bg-gradient-card">
+    <section className="py-20 bg-gradient-card relative overflow-hidden">
       <div className="container px-4 mx-auto">
-        <div className="text-center space-y-4 mb-16 animate-fade-in">
+        <div 
+          className="text-center space-y-4 mb-16 animate-fade-in"
+          style={{
+            transform: `translateY(${Math.max(0, parallaxOffset)}px)`,
+            transition: 'transform 0.1s ease-out',
+          }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">
             Meet the Founders
           </h2>
@@ -34,62 +44,70 @@ const Founders = () => {
         </div>
         
         <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-          {founders.map((founder, index) => (
-            <Card 
-              key={index}
-              className="p-8 hover:shadow-custom-xl transition-all duration-300 bg-card border-border animate-scale-in"
-              style={{ animationDelay: `${index * 0.2}s` }}
-            >
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-20 h-20 rounded-full bg-gradient-hero flex items-center justify-center text-3xl font-bold text-primary-foreground">
-                    {founder.name.charAt(0)}
+          {founders.map((founder, index) => {
+            const cardParallax = (scrollY - 2500) * (0.06 + index * 0.02);
+            
+            return (
+              <Card 
+                key={index}
+                className="p-8 hover:shadow-custom-xl transition-all duration-300 bg-card border-border animate-scale-in"
+                style={{ 
+                  animationDelay: `${index * 0.2}s`,
+                  transform: `translateY(${Math.max(0, cardParallax)}px)`,
+                  transition: 'transform 0.15s ease-out, box-shadow 0.3s ease',
+                }}
+              >
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-20 h-20 rounded-full bg-gradient-hero flex items-center justify-center text-3xl font-bold text-primary-foreground">
+                      {founder.name.charAt(0)}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-semibold text-card-foreground">
+                        {founder.name}
+                      </h3>
+                      <p className="text-primary font-medium">
+                        {founder.role}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-2xl font-semibold text-card-foreground">
-                      {founder.name}
-                    </h3>
-                    <p className="text-primary font-medium">
-                      {founder.role}
-                    </p>
+                  
+                  <p className="text-muted-foreground leading-relaxed">
+                    {founder.bio}
+                  </p>
+                  
+                  <div className="p-4 bg-accent/10 rounded-lg border border-accent/20">
+                    <p className="text-sm font-medium text-accent mb-1">Fun Fact:</p>
+                    <p className="text-foreground">{founder.funFact}</p>
+                  </div>
+                  
+                  <div className="flex gap-3 pt-2">
+                    <a 
+                      href={founder.linkedin}
+                      className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                      aria-label="LinkedIn profile"
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                    <a 
+                      href={founder.github}
+                      className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                      aria-label="GitHub profile"
+                    >
+                      <Github className="w-5 h-5" />
+                    </a>
+                    <a 
+                      href="mailto:founders@eunoia.edu"
+                      className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                      aria-label="Email founders"
+                    >
+                      <Mail className="w-5 h-5" />
+                    </a>
                   </div>
                 </div>
-                
-                <p className="text-muted-foreground leading-relaxed">
-                  {founder.bio}
-                </p>
-                
-                <div className="p-4 bg-accent/10 rounded-lg border border-accent/20">
-                  <p className="text-sm font-medium text-accent mb-1">Fun Fact:</p>
-                  <p className="text-foreground">{founder.funFact}</p>
-                </div>
-                
-                <div className="flex gap-3 pt-2">
-                  <a 
-                    href={founder.linkedin}
-                    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
-                    aria-label="LinkedIn profile"
-                  >
-                    <Linkedin className="w-5 h-5" />
-                  </a>
-                  <a 
-                    href={founder.github}
-                    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
-                    aria-label="GitHub profile"
-                  >
-                    <Github className="w-5 h-5" />
-                  </a>
-                  <a 
-                    href="mailto:founders@eunoa.edu"
-                    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
-                    aria-label="Email founders"
-                  >
-                    <Mail className="w-5 h-5" />
-                  </a>
-                </div>
-              </div>
-            </Card>
-          ))}
+              </Card>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -6,9 +6,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar, Mail, Phone, User, Users } from "lucide-react";
+import { useParallax } from "@/hooks/useParallax";
 
 const ContactForm = () => {
   const { toast } = useToast();
+  const scrollY = useParallax();
   const [formData, setFormData] = useState({
     parentName: "",
     email: "",
@@ -48,10 +50,18 @@ const ContactForm = () => {
     });
   };
 
+  const parallaxOffset = (scrollY - 3200) * 0.08;
+
   return (
-    <section id="contact" className="py-20 bg-background">
+    <section id="contact" className="py-20 bg-background relative overflow-hidden">
       <div className="container px-4 mx-auto">
-        <div className="text-center space-y-4 mb-16 animate-fade-in">
+        <div 
+          className="text-center space-y-4 mb-16 animate-fade-in"
+          style={{
+            transform: `translateY(${Math.max(0, parallaxOffset)}px)`,
+            transition: 'transform 0.1s ease-out',
+          }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">
             Book Your Free Session
           </h2>
@@ -61,7 +71,13 @@ const ContactForm = () => {
         </div>
         
         <div className="max-w-3xl mx-auto">
-          <Card className="p-8 md:p-12 shadow-custom-xl bg-gradient-card border-border animate-scale-in">
+          <Card 
+            className="p-8 md:p-12 shadow-custom-xl bg-gradient-card border-border animate-scale-in"
+            style={{
+              transform: `translateY(${Math.max(0, parallaxOffset * 0.5)}px)`,
+              transition: 'transform 0.15s ease-out',
+            }}
+          >
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">

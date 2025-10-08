@@ -1,26 +1,47 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/hero-students.jpg";
+import { useParallax } from "@/hooks/useParallax";
 
 const Hero = () => {
+  const scrollY = useParallax();
+  
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     element?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Parallax calculations
+  const bgParallax = scrollY * 0.5;
+  const contentParallax = scrollY * 0.3;
+  const imageParallax = scrollY * 0.2;
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-hero">
-      <div className="absolute inset-0 bg-black/20" />
+      {/* Parallax background overlay */}
+      <div 
+        className="absolute inset-0 bg-black/20" 
+        style={{
+          transform: `translateY(${bgParallax}px)`,
+        }}
+      />
       
       <div className="container relative z-10 px-4 py-20 mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          <div className="text-center lg:text-left space-y-6 animate-fade-in">
+          {/* Text content with parallax */}
+          <div 
+            className="text-center lg:text-left space-y-6 animate-fade-in"
+            style={{
+              transform: `translateY(${contentParallax}px)`,
+              transition: 'transform 0.1s ease-out',
+            }}
+          >
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-primary-foreground leading-tight">
               Build Your Future,
               <span className="block text-accent">One Skill at a Time</span>
             </h1>
             <p className="text-xl md:text-2xl text-primary-foreground/90 max-w-2xl">
-              Eunoa.edu empowers students from 6th to 10th grade with real-world tech skills and career coaching from industry experts at major tech firms.
+              Eunoia.edu empowers students from 6th to 10th grade with real-world tech skills and career coaching from industry experts at major tech firms.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
               <Button 
@@ -42,11 +63,18 @@ const Hero = () => {
             </div>
           </div>
           
-          <div className="relative animate-scale-in">
+          {/* Image with parallax */}
+          <div 
+            className="relative animate-scale-in"
+            style={{
+              transform: `translateY(${-imageParallax}px)`,
+              transition: 'transform 0.1s ease-out',
+            }}
+          >
             <div className="relative rounded-2xl overflow-hidden shadow-custom-xl">
               <img 
                 src={heroImage} 
-                alt="Students learning tech skills at Eunoa.edu" 
+                alt="Students learning tech skills at Eunoia.edu" 
                 className="w-full h-auto object-cover"
               />
             </div>

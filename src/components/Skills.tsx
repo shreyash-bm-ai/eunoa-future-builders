@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Code, Cpu, Mic, Rocket, Trophy, Wrench } from "lucide-react";
+import { useParallax } from "@/hooks/useParallax";
 
 const skills = [
   {
@@ -41,10 +42,19 @@ const skills = [
 ];
 
 const Skills = () => {
+  const scrollY = useParallax();
+  const parallaxOffset = (scrollY - 800) * 0.15;
+
   return (
-    <section id="skills" className="py-20 bg-gradient-card">
+    <section id="skills" className="py-20 bg-gradient-card relative overflow-hidden">
       <div className="container px-4 mx-auto">
-        <div className="text-center space-y-4 mb-16 animate-fade-in">
+        <div 
+          className="text-center space-y-4 mb-16 animate-fade-in"
+          style={{
+            transform: `translateY(${Math.max(0, parallaxOffset)}px)`,
+            transition: 'transform 0.1s ease-out',
+          }}
+        >
           <h2 className="text-4xl md:text-5xl font-bold text-foreground">
             Skills That Matter
           </h2>
@@ -56,11 +66,17 @@ const Skills = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skills.map((skill, index) => {
             const Icon = skill.icon;
+            const cardParallax = (scrollY - 900) * (0.05 + index * 0.01);
+            
             return (
               <Card 
                 key={index}
                 className="p-6 hover:shadow-custom-xl transition-all duration-300 hover:-translate-y-2 animate-fade-in-up bg-card border-border"
-                style={{ animationDelay: `${index * 0.1}s` }}
+                style={{ 
+                  animationDelay: `${index * 0.1}s`,
+                  transform: `translateY(${Math.max(0, cardParallax)}px)`,
+                  transition: 'transform 0.15s ease-out, box-shadow 0.3s ease, translate 0.3s ease',
+                }}
               >
                 <div className="space-y-4">
                   <div className={`w-14 h-14 rounded-lg bg-secondary flex items-center justify-center ${skill.color}`}>

@@ -6,7 +6,7 @@ const Footer = () => {
       <div className="container px-4 mx-auto">
         <div className="grid md:grid-cols-3 gap-8">
           <div className="space-y-4">
-            <h3 className="text-2xl font-bold">Eunoa.edu</h3>
+            <h3 className="text-2xl font-bold">Eunoia.edu</h3>
             <p className="text-background/80">
               Empowering the next generation with real tech skills and career guidance.
             </p>
@@ -17,8 +17,8 @@ const Footer = () => {
             <div className="space-y-2 text-background/80">
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4" />
-                <a href="mailto:hello@eunoa.edu" className="hover:text-background transition-colors">
-                  hello@eunoa.edu
+                <a href="mailto:hello@eunoia.edu" className="hover:text-background transition-colors">
+                  hello@eunoia.edu
                 </a>
               </div>
               <div className="flex items-center gap-2">
@@ -46,7 +46,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-background/20 mt-8 pt-8 text-center text-background/60">
-          <p>&copy; {new Date().getFullYear()} Eunoa.edu. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} Eunoia.edu. All rights reserved.</p>
         </div>
       </div>
     </footer>
