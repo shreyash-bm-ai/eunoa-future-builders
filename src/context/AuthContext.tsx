@@ -6,7 +6,11 @@ import {
   ReactNode,
 } from "react";
 import type { User } from "@supabase/supabase-js";
-import { supabase, signOut as supabaseSignOut } from "@/lib/supabase";
+import {
+  supabase,
+  signOut as supabaseSignOut,
+  ensureRegistrationFromUser,
+} from "@/lib/supabase";
 
 type AuthContextType = {
   user: User | null;
@@ -22,6 +26,12 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
 });
 
+const REGISTRATION_SYNC_EVENTS = new Set([
+  "SIGNED_IN",
+  "INITIAL_SESSION",
+  "USER_UPDATED",
+]);
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -33,14 +43,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
+      const sessionUser = session?.user ?? null;
+      setUser(sessionUser);
+      if (sessionUser) {
+        void ensureRegistrationFromUser(sessionUser);
+      }
       setLoading(false);
     });
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      const sessionUser = session?.user ?? null;
+      setUser(sessionUser);
+      if (sessionUser && REGISTRATION_SYNC_EVENTS.has(event)) {
+        void ensureRegistrationFromUser(sessionUser);
+      }
     });
 
     return () => subscription.unsubscribe();
